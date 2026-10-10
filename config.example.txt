@@ -1,0 +1,138 @@
+# MailToTana configuration
+#
+# This file is the single source of truth for your settings. Both the AppleScript
+# and the helper read it, so there is exactly one place to change anything.
+#
+# install.sh writes this file for you and fills in the Tana identifiers by asking
+# your running Tana what it has. You only need to open this file if you want to
+# change something afterwards.
+#
+# Format: one setting per line, "key = value". Lines starting with # are ignored,
+# and so are empty ones. A key with an empty value counts as not set.
+#
+# Lives at ~/.config/mailtotana/config.txt
+
+
+# ------------------------------------------------------------------------------
+# About you
+# ------------------------------------------------------------------------------
+
+# The language the summaries are written in. The prompts themselves are English;
+# this tells the model which language to answer in. Anything the model knows
+# works: English, Dutch, German, Nederlands, Français.
+#
+# Your mail can be in any language regardless — this is about the output only.
+output_language = English
+
+# Your own full name -- the person, not an address.
+#
+# It has to match the node you have for yourself in Tana, because it is used as
+# the owner of a task that comes out of a thread you never wrote in yourself.
+# Normally the name is read from your own message in the thread, so this is only
+# the fallback.
+owner_name = Your Full Name
+
+# Every address you send mail FROM, separated by commas.
+#
+# This is how the routine knows a message is yours, and it drives two things: you
+# are not added as a Contactperson on your own mail, and a task made from a
+# message you sent is phrased as something the RECIPIENT must deliver rather than
+# something you must do.
+#
+# Include aliases and old addresses that still appear as the sender on archived
+# mail. Matching is exact, so a missing address means your own message is treated
+# as if it came from someone else.
+my_email_addresses = you@example.com, you@work.example.org
+
+
+# ------------------------------------------------------------------------------
+# Tana — where things go
+#
+# These are node identifiers, not names, so renaming a supertag or field in Tana
+# does not break anything. install.sh fills them in.
+#
+# An empty value means "skip this field": nothing is written for it. The supertag
+# and the essence field are the two that cannot be skipped.
+# ------------------------------------------------------------------------------
+
+tana_workspace_id =
+
+# ---- The message variant: one node per mail -----------------------------------
+
+# The supertag applied to each message node. Required.
+tana_supertag_message =
+
+# Everyone involved: the sender and all recipients, as separate values. This is
+# what lets you click a person and see every mail they were part of. An
+# "Options from supertag" field pointing at your #Person tag works best, because
+# then names that already exist link up instead of becoming new nodes.
+tana_field_contactperson =
+
+# A fixed label saying this came in by mail, so you can tell these nodes apart
+# from WhatsApp, SMS or Teams messages kept under the same supertag. Set the
+# value it should get in tana_media_type_value below. Skip if you only ever put
+# email under this supertag.
+tana_field_media_type =
+
+# The date and time the mail was sent, as a Tana date.
+tana_field_when =
+
+# THE SUMMARISED TITLE: one sentence saying what the sender does or asks, with
+# their name in front. "Alex Moreau: asks whether the audit framework still
+# applies to the new contract." Required.
+#
+# This is the line you read when scanning your day page, so it is worth pointing
+# this at whichever field your supertag shows in its title expression.
+tana_field_essence =
+
+# The AI summarized content of the message: the body of the mail, summarised,
+# as separate lines. Everything that did not fit in the one-sentence title goes
+# here. Short mails often have nothing left over, and then this field is not
+# written at all.
+tana_field_content =
+
+# The address that reopens the original mail in Apple Mail. Plain text, not a
+# hyperlink — see tana-schema.md for why, and for the command button that turns
+# it into one click.
+tana_field_message_link =
+
+# The value to write into the "Media type" field. Only used when that field is
+# set above. Must match one of the options you defined on it.
+tana_media_type_value = E-mail
+
+# ---- The task variant: one task per mail --------------------------------------
+#
+# Leave the supertag empty if you do not want the task variant at all.
+
+tana_supertag_task =
+
+# Everything you need to work on the task without opening the mail: what
+# prompted it, what is being asked, what was already agreed, what you need, and
+# relevant background. Written as running text under fixed headings. Required
+# when the task variant is used.
+tana_field_briefing =
+
+# Who has to deliver. Only written for mail YOU sent — then the recipients go
+# here, because you are waiting on them. For incoming mail this is left alone so
+# your supertag's own default (normally you) applies.
+tana_field_task_owner =
+
+# The same mail address as above, on the task. A separate field from the one on
+# the message supertag, with deliberately the same name.
+tana_field_task_message_link =
+
+
+# ------------------------------------------------------------------------------
+# Tuning — sensible defaults, change only if you have a reason
+# ------------------------------------------------------------------------------
+
+# Which Claude model writes the summaries.
+claude_model = claude-sonnet-5
+
+# How many messages go into one API call. Higher is cheaper and faster but gives
+# the model more to hold at once.
+messages_per_api_call = 10
+
+# The most messages one run will process. A thread longer than this is refused
+# before any paid API call is made, so a stray selection cannot cost you money.
+maximum_messages_per_run = 20
